@@ -66,6 +66,9 @@ npm run test
 - Use DELETE instead of POST for delete car
 - Use middy (or an other middleware) to check client params
 - Update template Policies for DynamoDB
+- Use typescript interface for Car
+- Use Dynamo DB model for Car if possible
+- Use proper headers
 
 ## Useful links
 * https://levelup.gitconnected.com/how-to-use-typescript-for-aws-lambda-in-3-steps-1996243547eb
