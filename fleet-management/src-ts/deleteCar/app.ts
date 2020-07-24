@@ -1,8 +1,8 @@
-import {  APIGatewayProxyEvent,  APIGatewayProxyResult  } from "aws-lambda";
+import {  APIGatewayProxyEvent,  APIGatewayProxyResult, Context, Callback } from "aws-lambda";
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-export const lambdaHandler = (event: APIGatewayProxyEvent, context: any, callback: any) => {
+export const lambdaHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
 
   if(isNotValid(event)) {
     callback(null, {
@@ -14,9 +14,9 @@ export const lambdaHandler = (event: APIGatewayProxyEvent, context: any, callbac
   }
 
   const requestBody = JSON.parse(event.body);
-  const carId = requestBody.id;
+  const carId: string = requestBody.id;
 
-	deleteCar(carId).then((result: any) => {
+	deleteCar(carId).then((result: object) => {
     callback( null, {
       statusCode: 200,
       body: JSON.stringify({
@@ -26,10 +26,10 @@ export const lambdaHandler = (event: APIGatewayProxyEvent, context: any, callbac
       	'Access-Control-Allow-Origin': '*',
       },
     });
-    }).catch((err: any) => {
-      console.error(err);
-      errorResponse(err.message, context.awsRequestId, callback);
-   });
+  }).catch((err: any) => {
+    console.error(err);
+    errorResponse(err.message, context.awsRequestId, callback);
+ });
 }
 
 function deleteCar(carId: string) {
@@ -41,7 +41,7 @@ function deleteCar(carId: string) {
   }).promise();
 }
 
-function errorResponse(errorMessage: string, awsRequestId: number, callback: any) {
+function errorResponse(errorMessage: string, awsRequestId: string, callback: Callback) {
   callback(null, {
     statusCode: 500,
     body: JSON.stringify({

@@ -1,10 +1,10 @@
-import {  APIGatewayProxyEvent,  APIGatewayProxyResult  } from "aws-lambda";
+import {  APIGatewayProxyEvent,  APIGatewayProxyResult, Context, Callback } from "aws-lambda";
 const AWS = require('aws-sdk');
 AWS.config.update({region:'us-east-1'});
 const ddb = new AWS.DynamoDB.DocumentClient();
 const crypto = require("crypto");
 
-export const lambdaHandler = (event: APIGatewayProxyEvent, context: any, callback: any) => {
+export const lambdaHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
   const requestBody = JSON.parse(event.body);
   const carId: string = crypto.randomBytes(16).toString("hex");
 
@@ -17,7 +17,7 @@ export const lambdaHandler = (event: APIGatewayProxyEvent, context: any, callbac
     });
   }
 
-  addCar(carId, requestBody).then((result: any) => {
+  addCar(carId, requestBody).then((result: object) => {
     callback( null, {
       statusCode: 201,
       body: JSON.stringify({
@@ -55,7 +55,7 @@ function addCar(carId: string, car: any) {
     }).promise();
 }
 
-function errorResponse(errorMessage: string, awsRequestId: number, callback: any) {
+function errorResponse(errorMessage: string, awsRequestId: string, callback: Callback) {
   callback(null, {
     statusCode: 500,
     body: JSON.stringify({
