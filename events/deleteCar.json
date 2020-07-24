@@ -1,0 +1,11 @@
+{
+  "path": "/",
+  "httpMethod": "DELETE",
+  "headers": {
+    "Accept": "*/*",
+    "content-type": "application/json; charset=UTF-8"
+  },
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "body": "{\"id\":\"ssss\"}"
+}

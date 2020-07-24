@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  fleet-management
+
+  Fleet-management
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  FleetManagementFunction1:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: fleet-management/built/getCar
+      Policies:
+        # Give DynamoDB Full Access to your Lambda Function, this should be changed!
+        - AmazonDynamoDBFullAccess
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        FleetManagement:
+          Type: Api
+          Properties:
+            Path: /getCar
+            Method: get
+  FleetManagementFunction2:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: fleet-management/built/getAll
+      Policies:
+        # Give DynamoDB Full Access to your Lambda Function, this should be changed!
+        - AmazonDynamoDBFullAccess
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        FleetManagement:
+          Type: Api
+          Properties:
+            Path: /getAll
+            Method: get
+  FleetManagementFunction3:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: fleet-management/built/createCar
+      Policies:
+        # Give DynamoDB Full Access to your Lambda Function, this should be changed!
+        - AmazonDynamoDBFullAccess
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        FleetManagement:
+          Type: Api
+          Properties:
+            Path: /createCar
+            Method: post
+  FleetManagementFunction4:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: fleet-management/built/deleteCar
+      Policies:
+        # Give DynamoDB Full Access to your Lambda Function, this should be changed!
+        - AmazonDynamoDBFullAccess
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        FleetManagement:
+          Type: Api
+          Properties:
+            Path: /deleteCar
+            Method: post # use delete
+Outputs:
+  FleetManagementApi:
+    Description: "API Gateway endpoint URL for Prod stage for Fleet Management functions"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

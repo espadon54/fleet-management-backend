@@ -1,0 +1,11 @@
+{
+  "path": "/",
+  "httpMethod": "POST",
+  "headers": {
+    "Accept": "*/*",
+    "content-type": "application/json; charset=UTF-8"
+  },
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "body": "{\"name\":\"Executive car 2\",\"vin\":\"ASD423E3D3RF5\",\"make\":\"Mazda\",\"model\":\"CX-5\",\"year\":\"2019\",\"fuelType\":\"petrol\",\"type\":\"SUV\",\"Position\":{\"lat\":3.995,\"lon\":43.2221},\"odometer\":43546,\"fuel\":33.4,\"battery\":12.7}"
+}

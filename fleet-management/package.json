@@ -1,0 +1,26 @@
+{
+  "name": "Fleet",
+  "version": "1.0.0",
+  "description": "Fleet management POC",
+  "main": "app.js",
+  "repository": "",
+  "author": "SAM CLI",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "scripts": {
+    "test": "mocha built/*/tests/unit/",
+    "compile": "tsc"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.59",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^13.13.5",
+    "aws-sdk": "^2.655.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "typescript": "^3.8.3"
+  }
+}

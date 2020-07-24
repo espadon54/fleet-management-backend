@@ -1,0 +1,108 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Compile typescript files
+      run: |
+        cd fleet-management
+        npm install
+        npm run compile
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+        
+    - name: Run unit tests
+      run: |
+        cd fleet-management
+        npm run test
+
+
+    - name: Install sam CLI
+      run: |
+        pip3 install --upgrade setuptools
+        pip3 install aws-sam-cli --upgrade
+
+    # TESTING WITH CLI
+    # - name: Start local lambda endpoint
+    #   run: sam local start-lambda &
+
+    # - name: Query functions
+    #   run: |
+    #     aws lambda invoke --function-name "FleetManagementFunction1" --payload fileb://events/getCar.json --endpoint-url "http://127.0.0.1:3001" output1.json --region us-east-1
+    #     aws lambda invoke --function-name "FleetManagementFunction2" --payload fileb://events/getAll.json --endpoint-url "http://127.0.0.1:3001" output2.json --region us-east-1
+    #     aws lambda invoke --function-name "FleetManagementFunction3" --payload fileb://events/createCar.json --endpoint-url "http://127.0.0.1:3001" output3.json --region us-east-1
+    #     aws lambda invoke --function-name "FleetManagementFunction3" --payload fileb://events/deleteCar.json --endpoint-url "http://127.0.0.1:3001" output4.json --region us-east-1
+
+    # - name: Read getCar output
+    #   id: getCar
+    #   uses: notiz-dev/github-action-json-property@release
+    #   with: 
+    #     path: 'output1.json'
+    #     prop_path: 'statusCode'
+    # - name: Test getCar result
+    #   if: ${{steps.getCar.outputs.prop != 200 }} 
+    #   run: |
+    #     echo Fonction execution failed
+    #     echo Status is ${{steps.getCar.outputs.prop}}
+    #     exit 1
+
+    # - name: Read getAll output
+    #   id: getAll
+    #   uses: notiz-dev/github-action-json-property@release
+    #   with: 
+    #     path: 'output2.json'
+    #     prop_path: 'statusCode'
+    # - name: Test getAll result
+    #   if: ${{steps.getAll.outputs.prop != 200 }} 
+    #   run: |
+    #     echo Fonction execution failed
+    #     echo Status is ${{steps.getAll.outputs.prop}}
+    #     exit 1
+
+    # - name: Read createCar output
+    #   id: createCar
+    #   uses: notiz-dev/github-action-json-property@release
+    #   with: 
+    #     path: 'output3.json'
+    #     prop_path: 'statusCode'
+    # - name: Test createCar result
+    #   if: ${{steps.createCar.outputs.prop != 201 }} 
+    #   run: |
+    #     echo Fonction execution failed
+    #     echo Status is ${{steps.createCar.outputs.prop}}
+    #     exit 1
+
+    # - name: Read deleteCar output
+    #   id: deleteCar
+    #   uses: notiz-dev/github-action-json-property@release
+    #   with: 
+    #     path: 'output4.json'
+    #     prop_path: 'statusCode'
+    # - name: Test deleteCar result
+    #   if: ${{steps.deleteCar.outputs.prop != 201 }} 
+    #   run: |
+    #     echo Fonction execution failed
+    #     echo Status is ${{steps.deleteCar.outputs.prop}}
+    #     exit 1
+
+    - name: Deploy
+      run: sam deploy --no-fail-on-empty-changeset --no-confirm-changeset
+
