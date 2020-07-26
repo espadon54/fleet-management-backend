@@ -18,7 +18,9 @@ jobs:
 
     - name: Compile typescript files
       run: |
-        cd fleet-management
+        cd dependencies/nodejs
+        npm install
+        cd ../../fleet-management
         npm install
         npm run compile
 
