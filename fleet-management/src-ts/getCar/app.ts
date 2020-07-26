@@ -1,12 +1,10 @@
 import {  APIGatewayProxyEvent,  APIGatewayProxyResult, Context, Callback } from "aws-lambda";
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
-// import core
-const middy = require('@middy/core')
-// import some middlewares
-const jsonBodyParser = require('@middy/http-json-body-parser')
-const httpErrorHandler = require('@middy/http-error-handler')
-const validator = require('@middy/validator')
+const middy = require('@middy/core');
+const jsonBodyParser = require('@middy/http-json-body-parser');
+const httpErrorHandler = require('@middy/http-error-handler');
+const validator = require('@middy/validator');
 
 const getCarHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
   const carId: string = event.queryStringParameters.id;
@@ -49,22 +47,21 @@ function errorResponse(errorMessage: string, awsRequestId: string, callback: Cal
 }
 
 const inputSchema = {
- type: 'object',
- properties: {
-   queryStringParameters: {
-     type: 'object',
-     properties: {
-       id: { type: 'string', minLength: 32, maxLength: 32 },
-     },
-     required: ['id']
-   }
- }
+  type: 'object',
+  properties: {
+    queryStringParameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', minLength: 32, maxLength: 32 },
+      },
+      required: ['id']
+    }
+  }
 }
 
-// Let's "middyfy" our handler, then we will be able to attach middlewares to it
 const lambdaHandler = middy(getCarHandler)
-  .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object
-  .use(validator({inputSchema})) // validates the input
-  .use(httpErrorHandler()) // handles common http errors and returns proper responses
+  .use(jsonBodyParser())
+  .use(validator({inputSchema}))
+  .use(httpErrorHandler())
 
 module.exports = { lambdaHandler };

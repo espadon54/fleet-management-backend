@@ -1,21 +1,13 @@
 import {  APIGatewayProxyEvent,  APIGatewayProxyResult, Context, Callback } from "aws-lambda";
 const AWS = require('aws-sdk');
 const ddb = new AWS.DynamoDB.DocumentClient();
+const middy = require('@middy/core');
+const jsonBodyParser = require('@middy/http-json-body-parser');
+const httpErrorHandler = require('@middy/http-error-handler');
+const validator = require('@middy/validator');
 
-export const lambdaHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
-
-  if(isNotValid(event)) {
-    callback(null, {
-      statusCode: 400,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
-  }
-
-  const requestBody = JSON.parse(event.body);
-  const carId: string = requestBody.id;
-
+const deleteCarHandler = (event: any, context: Context, callback: Callback) => {
+  const carId: string = event.body.id;
 	deleteCar(carId).then((result: object) => {
     callback( null, {
       statusCode: 200,
@@ -54,11 +46,22 @@ function errorResponse(errorMessage: string, awsRequestId: string, callback: Cal
   });
 }
 
-function isNotValid(event: APIGatewayProxyEvent) {
-  const requestBody = JSON.parse(event.body);
-  let isNotValid = false;
-  if(!event || !event.body || !requestBody.id) {
-    isNotValid = true;
+const inputSchema = {
+  type: 'object',
+  properties: {
+    body: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', minLength: 32, maxLength: 32 },
+      },
+      required: ['id']
+    }
   }
-  return isNotValid;
 }
+
+const lambdaHandler = middy(deleteCarHandler)
+  .use(jsonBodyParser())
+  .use(validator({inputSchema}))
+  .use(httpErrorHandler())
+
+module.exports = { lambdaHandler };

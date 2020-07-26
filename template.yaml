@@ -36,6 +36,8 @@ Resources:
         # Give DynamoDB Full Access to your Lambda Function, this should be changed!
         - AmazonDynamoDBFullAccess
       Handler: app.lambdaHandler
+      Layers:
+        - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
         FleetManagement:
@@ -51,6 +53,8 @@ Resources:
         # Give DynamoDB Full Access to your Lambda Function, this should be changed!
         - AmazonDynamoDBFullAccess
       Handler: app.lambdaHandler
+      Layers:
+        - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
         FleetManagement:
@@ -66,6 +70,8 @@ Resources:
         # Give DynamoDB Full Access to your Lambda Function, this should be changed!
         - AmazonDynamoDBFullAccess
       Handler: app.lambdaHandler
+      Layers:
+        - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
         FleetManagement:
@@ -73,7 +79,6 @@ Resources:
           Properties:
             Path: /deleteCar
             Method: post # use delete
-
   FleetManagementLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
