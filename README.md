@@ -63,8 +63,8 @@ npm run test
 
 
 ## TO DO
+- Use middy (or an other middleware) to check client params [DONE]
 - Use DELETE instead of POST for delete car
-- Use middy (or an other middleware) to check client params
 - Update template Policies for DynamoDB
 - Use typescript interface for Car
 - Use Dynamo DB model for Car if possible
