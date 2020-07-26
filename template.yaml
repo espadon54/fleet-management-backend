@@ -19,6 +19,8 @@ Resources:
         # Give DynamoDB Full Access to your Lambda Function, this should be changed!
         - AmazonDynamoDBFullAccess
       Handler: app.lambdaHandler
+      Layers:
+        - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
         FleetManagement:
@@ -71,6 +73,18 @@ Resources:
           Properties:
             Path: /deleteCar
             Method: post # use delete
+
+  FleetManagementLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+        LayerName: fleet-management-dependencies
+        Description: Dependencies for fleet app
+        ContentUri: dependencies/
+        CompatibleRuntimes:
+          - nodejs6.10
+          - nodejs8.10
+        LicenseInfo: 'MIT'
+        RetentionPolicy: Retain
 Outputs:
   FleetManagementApi:
     Description: "API Gateway endpoint URL for Prod stage for Fleet Management functions"
