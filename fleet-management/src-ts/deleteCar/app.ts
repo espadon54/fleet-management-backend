@@ -5,9 +5,11 @@ const middy = require('@middy/core');
 const jsonBodyParser = require('@middy/http-json-body-parser');
 const httpErrorHandler = require('@middy/http-error-handler');
 const validator = require('@middy/validator');
+const cors = require('@middy/http-cors');
+const httpHeaderNormalizer = require('@middy/http-header-normalizer');
 
 const deleteCarHandler = (event: any, context: Context, callback: Callback) => {
-  const carId: string = event.body.id;
+  const carId = event.body.id;
 	deleteCar(carId).then((result: object) => {
     callback( null, {
       statusCode: 200,
@@ -46,22 +48,25 @@ function errorResponse(errorMessage: string, awsRequestId: string, callback: Cal
   });
 }
 
+
 const inputSchema = {
   type: 'object',
   properties: {
     body: {
       type: 'object',
+      required: ['id'],
       properties: {
-        id: { type: 'string', minLength: 32, maxLength: 32 },
+        id: { type: 'string' },
       },
-      required: ['id']
     }
-  }
+  },
 }
 
 const lambdaHandler = middy(deleteCarHandler)
+  .use(httpHeaderNormalizer())
   .use(jsonBodyParser())
   .use(validator({inputSchema}))
   .use(httpErrorHandler())
+  .use(cors())
 
 module.exports = { lambdaHandler };

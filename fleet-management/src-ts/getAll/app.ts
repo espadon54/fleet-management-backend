@@ -5,6 +5,7 @@ const middy = require('@middy/core');
 const jsonBodyParser = require('@middy/http-json-body-parser');
 const httpErrorHandler = require('@middy/http-error-handler');
 const validator = require('@middy/validator');
+const cors = require('@middy/http-cors');
 
 export const getAllHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
 	getAll().then((result: object) => {
@@ -49,5 +50,6 @@ const lambdaHandler = middy(getAllHandler)
   .use(jsonBodyParser())
   .use(validator({inputSchema}))
   .use(httpErrorHandler())
+  .use(cors())
 
 module.exports = { lambdaHandler };

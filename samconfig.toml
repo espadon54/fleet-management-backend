@@ -2,7 +2,7 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "FleetManagement"
+stack_name = "FleetManagementNew"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-n3doru82d8c5"
 s3_prefix = "FleetManagement"
 region = "us-east-1"

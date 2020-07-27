@@ -7,6 +7,7 @@ const middy = require('@middy/core');
 const jsonBodyParser = require('@middy/http-json-body-parser');
 const httpErrorHandler = require('@middy/http-error-handler');
 const validator = require('@middy/validator');
+const cors = require('@middy/http-cors');
 
 const createCarHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
   const carId: string = crypto.randomBytes(16).toString("hex");
@@ -88,5 +89,6 @@ const lambdaHandler = middy(createCarHandler)
   .use(jsonBodyParser())
   .use(validator({inputSchema}))
   .use(httpErrorHandler())
+  .use(cors())
 
 module.exports = { lambdaHandler };

@@ -11,7 +11,7 @@ Globals:
     Timeout: 3
 
 Resources:
-  FleetManagementFunction1:
+  getCar:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: fleet-management/built/getCar
@@ -23,12 +23,12 @@ Resources:
         - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
-        FleetManagement:
+        FleetManagementApi:
           Type: Api
           Properties:
             Path: /getCar
             Method: get
-  FleetManagementFunction2:
+  getAll:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: fleet-management/built/getAll
@@ -40,12 +40,12 @@ Resources:
         - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
-        FleetManagement:
+        FleetManagementApi:
           Type: Api
           Properties:
             Path: /getAll
             Method: get
-  FleetManagementFunction3:
+  createCar:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: fleet-management/built/createCar
@@ -57,12 +57,12 @@ Resources:
         - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
-        FleetManagement:
+        FleetManagementApi:
           Type: Api
           Properties:
             Path: /createCar
             Method: post
-  FleetManagementFunction4:
+  deleteCar:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: fleet-management/built/deleteCar
@@ -74,7 +74,7 @@ Resources:
         - !Ref FleetManagementLayer
       Runtime: nodejs12.x
       Events:
-        FleetManagement:
+        FleetManagementApi:
           Type: Api
           Properties:
             Path: /deleteCar
