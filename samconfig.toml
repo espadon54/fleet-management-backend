@@ -4,7 +4,7 @@ version = 0.1
 [default.deploy.parameters]
 stack_name = "FleetManagementNew"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-n3doru82d8c5"
-s3_prefix = "FleetManagement"
+s3_prefix = "FleetManagementNew"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_NAMED_IAM"

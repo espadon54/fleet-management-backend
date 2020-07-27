@@ -9,9 +9,10 @@ const httpErrorHandler = require('@middy/http-error-handler');
 const validator = require('@middy/validator');
 const cors = require('@middy/http-cors');
 
-const createCarHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
+const lambdaHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
   const carId: string = crypto.randomBytes(16).toString("hex");
-  addCar(carId, event.body).then((result: object) => {
+  const requestBody  = JSON.parse(event.body); 
+  addCar(carId, requestBody).then((result: object) => {
     callback( null, {
       statusCode: 201,
       body: JSON.stringify({
@@ -62,6 +63,7 @@ function errorResponse(errorMessage: string, awsRequestId: string, callback: Cal
   });
 }
 
+/*
 const inputSchema = {
   type: 'object',
   properties: {
@@ -90,5 +92,6 @@ const lambdaHandler = middy(createCarHandler)
   .use(validator({inputSchema}))
   .use(httpErrorHandler())
   .use(cors())
+*/
 
 module.exports = { lambdaHandler };
